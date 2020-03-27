@@ -6,11 +6,13 @@ namespace Philta.Models
 {
     public class PhiltaModel :IPhiltaModel
     {
-        public string TestLabel { get; set; }
+        public string FilePathTextBox { get; set; }
+        public string DestinationDirectoryTextBox { get; set; }
+        public string StatusLabel { get; set; }
 
         public PhiltaModel()
         {
-            TestLabel = "Test text";
+            DestinationDirectoryTextBox = @"C:\Philta\";
         }
     }
 }

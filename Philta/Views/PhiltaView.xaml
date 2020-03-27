@@ -6,10 +6,13 @@
         xmlns:local="clr-namespace:Philta.Views"
         mc:Ignorable="d"
         Title="Philta" Height="450" Width="800" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Label Content="{Binding TestLabel}" />
-    </Grid>
+    <StackPanel>
+        <Label Content="Original file path" />
+        <TextBox Text="{Binding FilePathTextBox}"/>
+        <Label Content="Destination directory" />
+        <TextBox Text="{Binding DestinationDirectoryTextBox}"/>
+        <Button Command="{Binding CopyButtonCommand}">Copy</Button>
+        <Button Command="{Binding ClearButtonCommand}">Clear</Button>
+        <Label Content="{Binding StatusLabel}" />
+    </StackPanel>
 </Window>

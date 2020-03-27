@@ -6,6 +6,8 @@ namespace Philta.Models
 {
     public interface IPhiltaModel
     {
-        string TestLabel { get; set; }
+        string FilePathTextBox { get; set; }
+        string DestinationDirectoryTextBox { get; set; }
+        string StatusLabel { get; set; }
     }
 }
