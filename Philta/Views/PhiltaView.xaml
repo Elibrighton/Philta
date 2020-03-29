@@ -9,6 +9,7 @@
     <StackPanel>
         <Label Content="Original file path" />
         <TextBox Text="{Binding FilePathTextBox}"/>
+        <Button Content="Paste" Command="{Binding PasteButtonCommand}"/>
         <Label Content="Destination directory" />
         <TextBox Text="{Binding DestinationDirectoryTextBox}"/>
         <Button Command="{Binding CopyButtonCommand}">Copy</Button>

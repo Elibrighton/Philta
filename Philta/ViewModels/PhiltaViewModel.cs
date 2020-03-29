@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Philta.ViewModels
@@ -12,6 +13,7 @@ namespace Philta.ViewModels
     {
         public ICommand CopyButtonCommand { get; set; }
         public ICommand ClearButtonCommand { get; set; }
+        public ICommand PasteButtonCommand { get; set; }
 
         private readonly IPhiltaModel _philtaModel;
 
@@ -21,6 +23,7 @@ namespace Philta.ViewModels
 
             CopyButtonCommand = new RelayCommand(OnCopyButtonCommand);
             ClearButtonCommand = new RelayCommand(OnClearButtonCommand);
+            PasteButtonCommand = new RelayCommand(OnPasteButtonCommand);
         }
 
         public string FilePathTextBox
@@ -89,6 +92,11 @@ namespace Philta.ViewModels
             FilePathTextBox = "";
             DestinationDirectoryTextBox = @"C:\Philta\";
             StatusLabel = "";
+        }
+
+        private void OnPasteButtonCommand(object param)
+        {
+            FilePathTextBox = Clipboard.GetText();
         }
 
         private string GetValidationError()
