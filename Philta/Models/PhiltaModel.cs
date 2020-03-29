@@ -12,6 +12,9 @@ namespace Philta.Models
         public string StatusLabel { get; set; }
         public ObservableCollection<IGenre> DirectoryListBoxItemSource { get; set; }
         public int SelectedDirectoryListBoxId { get; set; }
+        public string AddDirectoryTextBox { get; set; }
+
+        private const string _rootDirectory = @"C:\Philta\";
 
         public PhiltaModel()
         {
@@ -19,10 +22,9 @@ namespace Philta.Models
             SelectedDirectoryListBoxId = -1;
         }
 
-        private ObservableCollection<IGenre> GetDirectoryListBoxItemSource()
+        public ObservableCollection<IGenre> GetDirectoryListBoxItemSource()
         {
-            var rootDirectory = @"C:\Philta";
-            var subDirectories = Directory.GetDirectories(rootDirectory);
+            var subDirectories = Directory.GetDirectories(_rootDirectory);
 
             var itemSource = new ObservableCollection<IGenre>();
 

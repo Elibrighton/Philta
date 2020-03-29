@@ -5,12 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Philta.Views"
         mc:Ignorable="d"
-        Title="Philta" Height="550" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Philta" Height="650" Width="800" WindowStartupLocation="CenterScreen">
     <StackPanel>
         <Label Content="Original file path" />
         <Button Content="Paste file path" Command="{Binding PasteButtonCommand}"/>
         <TextBox Text="{Binding FilePathTextBox}"/>
-        <Label Content="Destination directory" />
+        <StackPanel>
+            <Label Content="Destination directory" />
+            <TextBox Text="{Binding AddDirectoryTextBox}"/>
+            <Button Content="Add new directory" Command="{Binding AddDirectoryButtonCommand}"/>
+        </StackPanel>
         <ListBox SelectionMode="Single" 
                  ItemsSource="{Binding DirectoryListBoxItemSource}" 
                  SelectedValue="{Binding SelectedDirectoryListBoxId}" 

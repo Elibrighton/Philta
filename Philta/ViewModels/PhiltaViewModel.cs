@@ -16,6 +16,9 @@ namespace Philta.ViewModels
         public ICommand CopyButtonCommand { get; set; }
         public ICommand ClearButtonCommand { get; set; }
         public ICommand PasteButtonCommand { get; set; }
+        public ICommand AddDirectoryButtonCommand { get; set; }
+
+        private const string _rootDirectory = @"C:\Philta\";
 
         private readonly IPhiltaModel _philtaModel;
 
@@ -26,6 +29,7 @@ namespace Philta.ViewModels
             CopyButtonCommand = new RelayCommand(OnCopyButtonCommand);
             ClearButtonCommand = new RelayCommand(OnClearButtonCommand);
             PasteButtonCommand = new RelayCommand(OnPasteButtonCommand);
+            AddDirectoryButtonCommand = new RelayCommand(OnAddDirectoryButtonCommand);
         }
 
         public string FilePathTextBox
@@ -68,6 +72,16 @@ namespace Philta.ViewModels
             }
         }
 
+        public string AddDirectoryTextBox
+        {
+            get { return _philtaModel.AddDirectoryTextBox; }
+            set
+            {
+                _philtaModel.AddDirectoryTextBox = value;
+                NotifyPropertyChanged("AddDirectoryTextBox");
+            }
+        }
+
         private void OnCopyButtonCommand(object param)
         {
             StatusLabel = "";
@@ -101,11 +115,33 @@ namespace Philta.ViewModels
             FilePathTextBox = "";
             SelectedDirectoryListBoxId = -1;
             StatusLabel = "";
+            AddDirectoryTextBox = "";
         }
 
         private void OnPasteButtonCommand(object param)
         {
             FilePathTextBox = Clipboard.GetText();
+        }
+
+        private void OnAddDirectoryButtonCommand(object param)
+        {
+            var newDirectory = Path.Combine(_rootDirectory, AddDirectoryTextBox);
+
+            if (!Directory.Exists(newDirectory))
+            {
+                Directory.CreateDirectory(newDirectory);
+
+                if (Directory.Exists(newDirectory))
+                {
+                    AddDirectoryTextBox = "";
+                    StatusLabel = "Directory created";
+                    DirectoryListBoxItemSource = _philtaModel.GetDirectoryListBoxItemSource();
+                }
+            }
+            else
+            {
+                StatusLabel = "Directory already exists";
+            }
         }
 
         private string GetSelectedDirectory()

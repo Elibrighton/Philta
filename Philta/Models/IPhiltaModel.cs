@@ -11,5 +11,7 @@ namespace Philta.Models
         string StatusLabel { get; set; }
         ObservableCollection<IGenre> DirectoryListBoxItemSource { get; set; }
         int SelectedDirectoryListBoxId { get; set; }
+        string AddDirectoryTextBox { get; set; }
+        ObservableCollection<IGenre> GetDirectoryListBoxItemSource();
     }
 }
