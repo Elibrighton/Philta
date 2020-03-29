@@ -68,21 +68,19 @@ namespace Philta.ViewModels
             {
                 var fileName = Path.GetFileName(FilePathTextBox);
 
-                if (!Directory.Exists(DestinationDirectoryTextBox))
-                {
-                    Directory.CreateDirectory(DestinationDirectoryTextBox);
-                }
+                CreateDirectory();
+
                 var destinationPath = Path.Combine(DestinationDirectoryTextBox, fileName);
 
                 File.Copy(FilePathTextBox, destinationPath);
 
                 if (File.Exists(destinationPath))
                 {
-                    StatusLabel = "File copied";
+                    StatusLabel += "File copied";
                 }
                 else
                 {
-                    StatusLabel = "Copy failed";
+                    StatusLabel += "Copy failed";
                 }
             }
         }
@@ -97,6 +95,19 @@ namespace Philta.ViewModels
         private void OnPasteButtonCommand(object param)
         {
             FilePathTextBox = Clipboard.GetText();
+        }
+
+        private void CreateDirectory()
+        {
+            if (!Directory.Exists(DestinationDirectoryTextBox))
+            {
+                Directory.CreateDirectory(DestinationDirectoryTextBox);
+
+                if (Directory.Exists(DestinationDirectoryTextBox))
+                {
+                    StatusLabel = "Directory created - ";
+                }
+            }
         }
 
         private string GetValidationError()
