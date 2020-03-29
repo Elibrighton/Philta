@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Philta.Models
@@ -7,7 +8,8 @@ namespace Philta.Models
     public interface IPhiltaModel
     {
         string FilePathTextBox { get; set; }
-        string DestinationDirectoryTextBox { get; set; }
         string StatusLabel { get; set; }
+        ObservableCollection<IGenre> DirectoryListBoxItemSource { get; set; }
+        int SelectedDirectoryListBoxId { get; set; }
     }
 }

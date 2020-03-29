@@ -2,7 +2,9 @@
 using Philta.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -36,16 +38,6 @@ namespace Philta.ViewModels
             }
         }
 
-        public string DestinationDirectoryTextBox
-        {
-            get { return _philtaModel.DestinationDirectoryTextBox; }
-            set
-            {
-                _philtaModel.DestinationDirectoryTextBox = value;
-                NotifyPropertyChanged("DestinationDirectoryTextBox");
-            }
-        }
-
         public string StatusLabel
         {
             get { return _philtaModel.StatusLabel; }
@@ -56,8 +48,29 @@ namespace Philta.ViewModels
             }
         }
 
+        public ObservableCollection<IGenre> DirectoryListBoxItemSource
+        {
+            get { return _philtaModel.DirectoryListBoxItemSource; }
+            set
+            {
+                _philtaModel.DirectoryListBoxItemSource = value;
+                NotifyPropertyChanged("DirectoryListBoxItemSource");
+            }
+        }
+
+        public int SelectedDirectoryListBoxId
+        {
+            get { return _philtaModel.SelectedDirectoryListBoxId; }
+            set
+            {
+                _philtaModel.SelectedDirectoryListBoxId = value;
+                NotifyPropertyChanged("SelectedDirectoryListBoxId");
+            }
+        }
+
         private void OnCopyButtonCommand(object param)
         {
+            StatusLabel = "";
             var validationError = GetValidationError();
 
             if (!string.IsNullOrEmpty(validationError))
@@ -67,10 +80,8 @@ namespace Philta.ViewModels
             else
             {
                 var fileName = Path.GetFileName(FilePathTextBox);
-
-                CreateDirectory();
-
-                var destinationPath = Path.Combine(DestinationDirectoryTextBox, fileName);
+                var selectedDirectory = GetSelectedDirectory();
+                var destinationPath = Path.Combine(selectedDirectory, fileName);
 
                 File.Copy(FilePathTextBox, destinationPath);
 
@@ -88,7 +99,7 @@ namespace Philta.ViewModels
         private void OnClearButtonCommand(object param)
         {
             FilePathTextBox = "";
-            DestinationDirectoryTextBox = @"C:\Philta\";
+            SelectedDirectoryListBoxId = -1;
             StatusLabel = "";
         }
 
@@ -97,17 +108,17 @@ namespace Philta.ViewModels
             FilePathTextBox = Clipboard.GetText();
         }
 
-        private void CreateDirectory()
+        private string GetSelectedDirectory()
         {
-            if (!Directory.Exists(DestinationDirectoryTextBox))
+            var selectedDirectory = string.Empty;
+            var directoryListBoxItem = DirectoryListBoxItemSource.Where(x => x.Id == SelectedDirectoryListBoxId).FirstOrDefault();
+            
+            if (directoryListBoxItem != null)
             {
-                Directory.CreateDirectory(DestinationDirectoryTextBox);
-
-                if (Directory.Exists(DestinationDirectoryTextBox))
-                {
-                    StatusLabel = "Directory created - ";
-                }
+                selectedDirectory = Path.Combine(@"C:\Philta", directoryListBoxItem.Name);
             }
+
+            return selectedDirectory;
         }
 
         private string GetValidationError()
@@ -122,13 +133,9 @@ namespace Philta.ViewModels
             {
                 validationError = "File does not exists";
             }
-            else if (string.IsNullOrEmpty(DestinationDirectoryTextBox))
+            else if (SelectedDirectoryListBoxId == -1)
             {
-                validationError = "Destination directory is empty";
-            }
-            else if (!DestinationDirectoryTextBox.Contains(@"C:\Philta\"))
-            {
-                validationError = "Destination directory is not inside \'C:\\Philta\\\' directory";
+                validationError = "Desitnation directory is not selected";
             }
 
             return validationError;
