@@ -8,8 +8,8 @@
         Title="Philta" Height="550" Width="800" WindowStartupLocation="CenterScreen">
     <StackPanel>
         <Label Content="Original file path" />
+        <Button Content="Paste file path" Command="{Binding PasteButtonCommand}"/>
         <TextBox Text="{Binding FilePathTextBox}"/>
-        <Button Content="Paste" Command="{Binding PasteButtonCommand}"/>
         <Label Content="Destination directory" />
         <ListBox SelectionMode="Single" 
                  ItemsSource="{Binding DirectoryListBoxItemSource}" 
@@ -17,8 +17,8 @@
                  SelectedValuePath="Id" 
                  DisplayMemberPath="Name">
         </ListBox>
-        <Button Command="{Binding CopyButtonCommand}">Copy</Button>
-        <Button Command="{Binding ClearButtonCommand}">Clear</Button>
+        <Button Content="Copy file to destination" Command="{Binding CopyButtonCommand}"/>
+        <Button Content="Clear form" Command="{Binding ClearButtonCommand}"/>
         <Label Content="{Binding StatusLabel}" />
     </StackPanel>
 </Window>
