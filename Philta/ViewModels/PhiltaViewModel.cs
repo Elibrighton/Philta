@@ -113,6 +113,12 @@ namespace Philta.ViewModels
             {
                 var fileName = Path.GetFileName(FilePathTextBox);
                 var selectedDirectory = GetSelectedDirectory();
+
+                if (!Directory.Exists(selectedDirectory))
+                {
+                    Directory.CreateDirectory(selectedDirectory);
+                }
+
                 var destinationPath = Path.Combine(selectedDirectory, fileName);
 
                 File.Copy(FilePathTextBox, destinationPath);
