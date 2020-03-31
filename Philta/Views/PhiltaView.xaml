@@ -7,14 +7,17 @@
         mc:Ignorable="d"
         Title="Philta" Height="650" Width="800" WindowStartupLocation="CenterScreen">
     <StackPanel>
-        <Label Content="Original file path" />
+        <Label Content="Source file path" />
         <Button Content="Paste file path" Command="{Binding PasteButtonCommand}"/>
         <TextBox Text="{Binding FilePathTextBox}"/>
-        <StackPanel>
-            <Label Content="Destination directory" />
-            <TextBox Text="{Binding AddDirectoryTextBox}"/>
-            <Button Content="Add new directory" Command="{Binding AddDirectoryButtonCommand}"/>
+        <Label Content="Song type" />
+        <StackPanel Orientation="Horizontal">
+            <RadioButton GroupName="SongType" Content="Remix" IsChecked="{Binding IsSongTypeRemixChecked}" />
+            <RadioButton GroupName="SongType" Content="Original" IsChecked="{Binding IsSongTypeOriginalChecked}" />
         </StackPanel>
+        <Label Content="Destination directory" />
+        <TextBox Text="{Binding AddDirectoryTextBox}"/>
+        <Button Content="Add new directory" Command="{Binding AddDirectoryButtonCommand}"/>
         <ListBox SelectionMode="Single" 
                  ItemsSource="{Binding DirectoryListBoxItemSource}" 
                  SelectedValue="{Binding SelectedDirectoryListBoxId}" 

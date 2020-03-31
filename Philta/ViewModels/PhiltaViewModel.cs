@@ -18,8 +18,6 @@ namespace Philta.ViewModels
         public ICommand PasteButtonCommand { get; set; }
         public ICommand AddDirectoryButtonCommand { get; set; }
 
-        private const string _rootDirectory = @"C:\Philta\";
-
         private readonly IPhiltaModel _philtaModel;
 
         public PhiltaViewModel(IPhiltaModel philtaModel)
@@ -82,6 +80,26 @@ namespace Philta.ViewModels
             }
         }
 
+        public bool IsSongTypeRemixChecked
+        {
+            get { return _philtaModel.IsSongTypeRemixChecked; }
+            set
+            {
+                _philtaModel.IsSongTypeRemixChecked = value;
+                NotifyPropertyChanged("IsSongTypeRemixChecked");
+            }
+        }
+
+        public bool IsSongTypeOriginalChecked
+        {
+            get { return _philtaModel.IsSongTypeOriginalChecked; }
+            set
+            {
+                _philtaModel.IsSongTypeOriginalChecked = value;
+                NotifyPropertyChanged("IsSongTypeOriginalChecked");
+            }
+        }
+
         private void OnCopyButtonCommand(object param)
         {
             StatusLabel = "";
@@ -116,6 +134,8 @@ namespace Philta.ViewModels
             SelectedDirectoryListBoxId = -1;
             StatusLabel = "";
             AddDirectoryTextBox = "";
+            IsSongTypeRemixChecked = true;
+            IsSongTypeOriginalChecked = false;
         }
 
         private void OnPasteButtonCommand(object param)
@@ -125,7 +145,7 @@ namespace Philta.ViewModels
 
         private void OnAddDirectoryButtonCommand(object param)
         {
-            var newDirectory = Path.Combine(_rootDirectory, AddDirectoryTextBox);
+            var newDirectory = GetNewDirectory();
 
             if (!Directory.Exists(newDirectory))
             {
@@ -135,13 +155,38 @@ namespace Philta.ViewModels
                 {
                     AddDirectoryTextBox = "";
                     StatusLabel = "Directory created";
-                    DirectoryListBoxItemSource = _philtaModel.GetDirectoryListBoxItemSource();
+                    DirectoryListBoxItemSource = new ObservableCollection<IGenre>();
+                    _philtaModel.SetDirectoryListBoxItemSource();
+                    DirectoryListBoxItemSource = _philtaModel.DirectoryListBoxItemSource;
                 }
             }
             else
             {
                 StatusLabel = "Directory already exists";
             }
+        }
+
+        private string GetNewDirectory()
+        {
+            string songType = GetSongType();
+
+            return Path.Combine(IPhiltaModel.RootDirectory, songType, AddDirectoryTextBox);
+        }
+
+        private string GetSongType()
+        {
+            var songType = string.Empty;
+
+            if (IsSongTypeRemixChecked)
+            {
+                songType = "Remix";
+            }
+            else
+            {
+                songType = "Original";
+            }
+
+            return songType;
         }
 
         private string GetSelectedDirectory()
@@ -151,7 +196,8 @@ namespace Philta.ViewModels
             
             if (directoryListBoxItem != null)
             {
-                selectedDirectory = Path.Combine(@"C:\Philta", directoryListBoxItem.Name);
+                string songType = GetSongType();
+                selectedDirectory = Path.Combine(@"C:\Philta", songType, directoryListBoxItem.Name);
             }
 
             return selectedDirectory;
