@@ -16,7 +16,6 @@ namespace Philta.ViewModels
         public ICommand CopyButtonCommand { get; set; }
         public ICommand ClearButtonCommand { get; set; }
         public ICommand PasteButtonCommand { get; set; }
-        public ICommand AddDirectoryButtonCommand { get; set; }
 
         private readonly IPhiltaModel _philtaModel;
 
@@ -27,7 +26,6 @@ namespace Philta.ViewModels
             CopyButtonCommand = new RelayCommand(OnCopyButtonCommand);
             ClearButtonCommand = new RelayCommand(OnClearButtonCommand);
             PasteButtonCommand = new RelayCommand(OnPasteButtonCommand);
-            AddDirectoryButtonCommand = new RelayCommand(OnAddDirectoryButtonCommand);
         }
 
         public string FilePathTextBox
@@ -50,36 +48,6 @@ namespace Philta.ViewModels
             }
         }
 
-        public ObservableCollection<IGenre> DirectoryListBoxItemSource
-        {
-            get { return _philtaModel.DirectoryListBoxItemSource; }
-            set
-            {
-                _philtaModel.DirectoryListBoxItemSource = value;
-                NotifyPropertyChanged("DirectoryListBoxItemSource");
-            }
-        }
-
-        public int SelectedDirectoryListBoxId
-        {
-            get { return _philtaModel.SelectedDirectoryListBoxId; }
-            set
-            {
-                _philtaModel.SelectedDirectoryListBoxId = value;
-                NotifyPropertyChanged("SelectedDirectoryListBoxId");
-            }
-        }
-
-        public string AddDirectoryTextBox
-        {
-            get { return _philtaModel.AddDirectoryTextBox; }
-            set
-            {
-                _philtaModel.AddDirectoryTextBox = value;
-                NotifyPropertyChanged("AddDirectoryTextBox");
-            }
-        }
-
         public bool IsSongTypeRemixChecked
         {
             get { return _philtaModel.IsSongTypeRemixChecked; }
@@ -97,6 +65,37 @@ namespace Philta.ViewModels
             {
                 _philtaModel.IsSongTypeOriginalChecked = value;
                 NotifyPropertyChanged("IsSongTypeOriginalChecked");
+            }
+        }
+
+        public ObservableCollection<IGenre> DirectoryComboBoxItemSource
+        {
+            get { return _philtaModel.DirectoryComboBoxItemSource; }
+            set
+            {
+                _philtaModel.DirectoryComboBoxItemSource = value;
+                NotifyPropertyChanged("DirectoryComboBoxItemSource");
+            }
+        }
+
+        public IGenre SelectedDirectoryComboBoxItem
+        {
+            get { return _philtaModel.SelectedDirectoryComboBoxItem; }
+            set
+            {
+                _philtaModel.SelectedDirectoryComboBoxItem = value;
+                NotifyPropertyChanged("SelectedDirectoryComboBoxItem");
+            }
+        }
+
+        public string DirectoryText
+        {
+            get { return _philtaModel.DirectoryText; }
+            set
+            {
+                _philtaModel.DirectoryText = value;
+
+                NotifyPropertyChanged("DirectoryText");
             }
         }
 
@@ -137,46 +136,24 @@ namespace Philta.ViewModels
         private void OnClearButtonCommand(object param)
         {
             FilePathTextBox = "";
-            SelectedDirectoryListBoxId = -1;
             StatusLabel = "";
-            AddDirectoryTextBox = "";
             IsSongTypeRemixChecked = true;
             IsSongTypeOriginalChecked = false;
+            SelectedDirectoryComboBoxItem = null;
+
+            if (!string.IsNullOrEmpty(DirectoryText))
+            {
+                DirectoryComboBoxItemSource = new ObservableCollection<IGenre>();
+                _philtaModel.SetDirectoryComboBoxItemSource();
+                DirectoryComboBoxItemSource = _philtaModel.DirectoryComboBoxItemSource;
+            }
+
+            DirectoryText = "";
         }
 
         private void OnPasteButtonCommand(object param)
         {
             FilePathTextBox = Clipboard.GetText();
-        }
-
-        private void OnAddDirectoryButtonCommand(object param)
-        {
-            var newDirectory = GetNewDirectory();
-
-            if (!Directory.Exists(newDirectory))
-            {
-                Directory.CreateDirectory(newDirectory);
-
-                if (Directory.Exists(newDirectory))
-                {
-                    AddDirectoryTextBox = "";
-                    StatusLabel = "Directory created";
-                    DirectoryListBoxItemSource = new ObservableCollection<IGenre>();
-                    _philtaModel.SetDirectoryListBoxItemSource();
-                    DirectoryListBoxItemSource = _philtaModel.DirectoryListBoxItemSource;
-                }
-            }
-            else
-            {
-                StatusLabel = "Directory already exists";
-            }
-        }
-
-        private string GetNewDirectory()
-        {
-            string songType = GetSongType();
-
-            return Path.Combine(IPhiltaModel.RootDirectory, songType, AddDirectoryTextBox);
         }
 
         private string GetSongType()
@@ -197,16 +174,10 @@ namespace Philta.ViewModels
 
         private string GetSelectedDirectory()
         {
-            var selectedDirectory = string.Empty;
-            var directoryListBoxItem = DirectoryListBoxItemSource.Where(x => x.Id == SelectedDirectoryListBoxId).FirstOrDefault();
+            string songType = GetSongType();
+            var destinationDirectory = SelectedDirectoryComboBoxItem == null ? DirectoryText : SelectedDirectoryComboBoxItem.Name;
             
-            if (directoryListBoxItem != null)
-            {
-                string songType = GetSongType();
-                selectedDirectory = Path.Combine(@"C:\Philta", songType, directoryListBoxItem.Name);
-            }
-
-            return selectedDirectory;
+            return Path.Combine(@"C:\Philta", songType, destinationDirectory);
         }
 
         private string GetValidationError()
@@ -221,9 +192,9 @@ namespace Philta.ViewModels
             {
                 validationError = "File does not exists";
             }
-            else if (SelectedDirectoryListBoxId == -1)
+            else if (SelectedDirectoryComboBoxItem == null && string.IsNullOrEmpty(DirectoryText))
             {
-                validationError = "Desitnation directory is not selected";
+                validationError = "Destination directory is not selected";
             }
 
             return validationError;

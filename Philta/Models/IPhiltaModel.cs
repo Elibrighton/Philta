@@ -10,11 +10,12 @@ namespace Philta.Models
         public const string RootDirectory = @"C:\Philta\";
         string FilePathTextBox { get; set; }
         string StatusLabel { get; set; }
-        ObservableCollection<IGenre> DirectoryListBoxItemSource { get; set; }
-        int SelectedDirectoryListBoxId { get; set; }
-        string AddDirectoryTextBox { get; set; }
-        void SetDirectoryListBoxItemSource(string rootDirectory = RootDirectory);
         bool IsSongTypeRemixChecked { get; set; }
         bool IsSongTypeOriginalChecked { get; set; }
+        ObservableCollection<IGenre> DirectoryComboBoxItemSource { get; set; }
+        IGenre SelectedDirectoryComboBoxItem { get; set; }
+        string DirectoryText { get; set; }
+
+        void SetDirectoryComboBoxItemSource(string rootDirectory = RootDirectory);
     }
 }

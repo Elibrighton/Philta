@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Philta.Views"
         mc:Ignorable="d"
-        Title="Philta" Height="650" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Philta" Height="350" Width="800" WindowStartupLocation="CenterScreen">
     <StackPanel>
         <Label Content="Source file path" />
         <Button Content="Paste file path" Command="{Binding PasteButtonCommand}"/>
@@ -16,14 +16,11 @@
             <RadioButton GroupName="SongType" Content="Original" IsChecked="{Binding IsSongTypeOriginalChecked}" />
         </StackPanel>
         <Label Content="Destination directory" />
-        <TextBox Text="{Binding AddDirectoryTextBox}"/>
-        <Button Content="Add new directory" Command="{Binding AddDirectoryButtonCommand}"/>
-        <ListBox SelectionMode="Single" 
-                 ItemsSource="{Binding DirectoryListBoxItemSource}" 
-                 SelectedValue="{Binding SelectedDirectoryListBoxId}" 
-                 SelectedValuePath="Id" 
-                 DisplayMemberPath="Name">
-        </ListBox>
+        <ComboBox IsEditable="True" 
+                  ItemsSource="{Binding DirectoryComboBoxItemSource}" 
+                  SelectedItem="{Binding SelectedDirectoryComboBoxItem}" 
+                  DisplayMemberPath="Name"
+                  Text="{Binding DirectoryText, UpdateSourceTrigger=LostFocus}"/>
         <Button Content="Copy file to destination" Command="{Binding CopyButtonCommand}"/>
         <Button Content="Clear form" Command="{Binding ClearButtonCommand}"/>
         <Label Content="{Binding StatusLabel}" />

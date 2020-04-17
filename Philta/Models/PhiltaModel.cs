@@ -14,21 +14,21 @@ namespace Philta.Models
 
         public string FilePathTextBox { get; set; }
         public string StatusLabel { get; set; }
-        public ObservableCollection<IGenre> DirectoryListBoxItemSource { get; set; }
-        public int SelectedDirectoryListBoxId { get; set; }
-        public string AddDirectoryTextBox { get; set; }
         public bool IsSongTypeRemixChecked { get; set; }
         public bool IsSongTypeOriginalChecked { get; set; }
+        public ObservableCollection<IGenre> DirectoryComboBoxItemSource { get; set; }
+        public IGenre SelectedDirectoryComboBoxItem { get; set; }
+
+        public string DirectoryText { get; set; }
 
         public PhiltaModel()
         {
-            DirectoryListBoxItemSource = new ObservableCollection<IGenre>();
-            SetDirectoryListBoxItemSource(RootDirectory);
-            SelectedDirectoryListBoxId = -1;
             IsSongTypeRemixChecked = true;
+            DirectoryComboBoxItemSource = new ObservableCollection<IGenre>();
+            SetDirectoryComboBoxItemSource(RootDirectory);
         }
 
-        public void SetDirectoryListBoxItemSource(string rootDirectory = RootDirectory)
+        public void SetDirectoryComboBoxItemSource(string rootDirectory = RootDirectory)
         {
             var subDirectories = Directory.GetDirectories(rootDirectory);
 
@@ -38,19 +38,19 @@ namespace Philta.Models
 
                 if (directoryName == "Remix" || directoryName == "Original")
                 {
-                    SetDirectoryListBoxItemSource(Path.Combine(rootDirectory, directoryName));
+                    SetDirectoryComboBoxItemSource(Path.Combine(rootDirectory, directoryName));
                 }
                 else
                 {
-                    if (DirectoryListBoxItemSource.Where(x => x.Name == directoryName).FirstOrDefault() == null)
+                    if (DirectoryComboBoxItemSource.Where(x => x.Name == directoryName).FirstOrDefault() == null)
                     {
-                        var id = DirectoryListBoxItemSource.Count;
-                        DirectoryListBoxItemSource.Add(new Genre { Id = id, Name = directoryName });
+                        var id = DirectoryComboBoxItemSource.Count;
+                        DirectoryComboBoxItemSource.Add(new Genre { Id = id, Name = directoryName });
                     }
                 }
             }
 
-            DirectoryListBoxItemSource = new ObservableCollection<IGenre>(DirectoryListBoxItemSource.OrderBy(x => x.Name));
+            DirectoryComboBoxItemSource = new ObservableCollection<IGenre>(DirectoryComboBoxItemSource.OrderBy(x => x.Name));
         }
     }
 }
