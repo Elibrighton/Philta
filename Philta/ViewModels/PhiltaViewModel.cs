@@ -120,15 +120,22 @@ namespace Philta.ViewModels
 
                 var destinationPath = Path.Combine(selectedDirectory, fileName);
 
-                File.Copy(FilePathTextBox, destinationPath);
-
-                if (File.Exists(destinationPath))
+                if (!File.Exists(destinationPath))
                 {
-                    StatusLabel += "File copied";
+                    File.Copy(FilePathTextBox, destinationPath);
+
+                    if (File.Exists(destinationPath))
+                    {
+                        StatusLabel += "File copied";
+                    }
+                    else
+                    {
+                        StatusLabel += "Copy failed";
+                    }
                 }
                 else
                 {
-                    StatusLabel += "Copy failed";
+                    StatusLabel += "File already exists";
                 }
             }
         }
