@@ -7,7 +7,7 @@ namespace Philta.Models
 {
     public interface IPhiltaModel
     {
-        public const string RootDirectory = @"C:\Philta\";
+        public const string RootDirectory = @"C:\Philta music\";
         string FilePathTextBox { get; set; }
         string StatusLabel { get; set; }
         bool IsSongTypeRemixChecked { get; set; }

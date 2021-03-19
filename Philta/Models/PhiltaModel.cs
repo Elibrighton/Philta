@@ -10,7 +10,7 @@ namespace Philta.Models
     public class PhiltaModel : IPhiltaModel
     {
 
-        public const string RootDirectory = @"C:\Philta\";
+        public const string RootDirectory = @"C:\Philta music\";
 
         public string FilePathTextBox { get; set; }
         public string StatusLabel { get; set; }

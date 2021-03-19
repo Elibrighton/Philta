@@ -184,7 +184,7 @@ namespace Philta.ViewModels
             string songType = GetSongType();
             var destinationDirectory = SelectedDirectoryComboBoxItem == null ? DirectoryText : SelectedDirectoryComboBoxItem.Name;
             
-            return Path.Combine(@"C:\Philta", songType, destinationDirectory);
+            return Path.Combine(@"C:\Philta music", songType, destinationDirectory);
         }
 
         private string GetValidationError()
